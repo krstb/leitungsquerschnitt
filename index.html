@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leitungsquerschnitt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Using Inter font as the default */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom styles for input number spinners */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+         /* Styles for active and inactive tabs */
+        .tab-btn.active {
+            background-color: white;
+            color: #3B82F6; /* blue-500 */
+            border-color: #E5E7EB; /* gray-200 */
+            border-bottom-color: white;
+            margin-bottom: -1px;
+        }
+        .tab-btn {
+            background-color: #F9FAFB; /* gray-50 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-2">
+
+    <div class="w-full max-w-lg mx-auto bg-white rounded-2xl shadow-lg p-3 md:p-4">
+        
+        <div class="text-center mb-4">
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800">Leitungsquerschnitt</h1>
+            <p class="text-gray-500 text-sm mt-1">Inkl. Spannungsfall-Berechnung</p>
+        </div>
+
+        <div class="mb-2 border-b border-gray-200">
+            <nav class="-mb-px flex space-x-2" aria-label="Tabs">
+                <button id="tab-current" class="tab-btn active py-1 px-2 border text-sm font-medium rounded-t-lg focus:outline-none">
+                    Nach A
+                </button>
+                <button id="tab-diameter" class="tab-btn py-1 px-2 border text-sm font-medium rounded-t-lg focus:outline-none">
+                    Nach ø
+                </button>
+                 <button id="tab-cross-section" class="tab-btn py-1 px-2 border text-sm font-medium rounded-t-lg focus:outline-none">
+                    Nach mm²
+                </button>
+            </nav>
+        </div>
+
+        <div>
+            <div id="panel-current">
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="current" class="text-sm font-medium text-gray-700">Stromstärke (in Ampere)</label>
+                    <input type="number" id="current" placeholder="z.B. 16" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                </div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="voltage-current" class="text-sm font-medium text-gray-700">Spannung (in Volt)</label>
+                    <input type="number" id="voltage-current" value="12" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                </div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="length-current" class="text-sm font-medium text-gray-700">Leitungslänge (in Meter)</label>
+                    <input type="number" id="length-current" value="1" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                </div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="material-current" class="text-sm font-medium text-gray-700">Material</label>
+                    <select id="material-current" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
+                        <option value="copper">Kupfer</option>
+                        <option value="aluminum">Aluminium</option>
+                    </select>
+                </div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="installation-current" class="text-sm font-medium text-gray-700">Verlegeart</label>
+                    <select id="installation-current" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
+                        <option value="air">Frei in der Luft</option>
+                        <option value="wall">In oder an der Wand</option>
+                        <option value="ground">Im Erdboden</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="panel-diameter" class="hidden">
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="diameter" class="text-sm font-medium text-gray-700">Leiterdurchmesser (in mm)</label>
+                    <input type="number" id="diameter" placeholder="z.B. 1.38" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                </div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="voltage-diameter" class="text-sm font-medium text-gray-700">Spannung (in Volt)</label>
+                    <input type="number" id="voltage-diameter" value="12" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                </div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="length-diameter" class="text-sm font-medium text-gray-700">Leitungslänge (in Meter)</label>
+                    <input type="number" id="length-diameter" value="1" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                </div>
+                 <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="material-diameter" class="text-sm font-medium text-gray-700">Material</label>
+                    <select id="material-diameter" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
+                        <option value="copper">Kupfer</option>
+                        <option value="aluminum">Aluminium</option>
+                    </select>
+                </div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="installation-diameter" class="text-sm font-medium text-gray-700">Verlegeart</label>
+                    <select id="installation-diameter" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
+                        <option value="air">Frei in der Luft</option>
+                        <option value="wall">In oder an der Wand</option>
+                        <option value="ground">Im Erdboden</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="panel-cross-section" class="hidden">
+                 <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="cross-section" class="text-sm font-medium text-gray-700">Leiterquerschnitt (in mm²)</label>
+                    <input type="number" id="cross-section" placeholder="z.B. 1.5" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                </div>
+                 <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="voltage-crossSection" class="text-sm font-medium text-gray-700">Spannung (in Volt)</label>
+                    <input type="number" id="voltage-crossSection" value="12" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                </div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="length-crossSection" class="text-sm font-medium text-gray-700">Leitungslänge (in Meter)</label>
+                    <input type="number" id="length-crossSection" value="1" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                </div>
+                 <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="material-cross-section" class="text-sm font-medium text-gray-700">Material</label>
+                    <select id="material-cross-section" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
+                        <option value="copper">Kupfer</option>
+                        <option value="aluminum">Aluminium</option>
+                    </select>
+                </div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="installation-cross-section" class="text-sm font-medium text-gray-700">Verlegeart</label>
+                    <select id="installation-cross-section" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
+                        <option value="air">Frei in der Luft</option>
+                        <option value="wall">In oder an der Wand</option>
+                        <option value="ground">Im Erdboden</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+         <div id="error-message" class="text-red-500 text-center text-sm mt-4 font-medium hidden"></div>
+
+        <div id="results-container" class="mt-4 pt-3 border-t border-gray-200 hidden">
+            <h2 class="text-lg font-semibold text-center text-gray-800 mb-2">Ergebnis</h2>
+            <div class="grid grid-cols-1 gap-2 text-sm">
+                <div id="result-cross-section-container" class="bg-blue-50 p-2 rounded-lg flex items-center justify-between">
+                    <span class="font-medium text-blue-800">Querschnitt:</span>
+                    <span id="result-cross-section" class="text-lg font-bold text-blue-900"></span>
+                </div>
+                <div id="result-standard-cross-section-container" class="bg-blue-100 p-2 rounded-lg flex items-center justify-between">
+                    <span class="font-medium text-blue-800">Nächster Standard:</span>
+                    <span id="result-standard-cross-section" class="text-lg font-bold text-blue-900"></span>
+                </div>
+                <div id="result-diameter-container" class="bg-green-50 p-2 rounded-lg flex items-center justify-between">
+                    <span class="font-medium text-green-800">Durchmesser:</span>
+                    <span id="result-diameter" class="text-lg font-bold text-green-900"></span>
+                </div>
+                <div id="result-current-container" class="bg-purple-50 p-2 rounded-lg flex items-center justify-between">
+                    <span class="font-medium text-purple-800">Max. Stromstärke:</span>
+                    <span id="result-current" class="text-lg font-bold text-purple-900"></span>
+                </div>
+                <div id="result-voltagedrop-container" class="bg-yellow-50 p-2 rounded-lg flex items-center justify-between">
+                    <span class="font-medium text-yellow-800">Spannungsfall:</span>
+                    <span id="result-voltagedrop" class="text-lg font-bold text-yellow-900"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Data ---
+        const standardCrossSections = [0.14, 0.25, 0.34, 0.5, 0.75, 1.0, 1.5, 2.5, 4, 6, 10, 16, 25, 35, 50];
+        const currentCapacity = {
+            copper: {
+                air:    [3, 5, 7, 9, 12, 15, 19.5, 26, 34, 44, 61, 82, 108, 135, 168],
+                // KORRIGIERTER WERT: 1.0mm² (6. Wert) auf 10A, 1.5mm² (7. Wert) auf 15.5A
+                wall:   [2.5, 4, 6, 8, 10, 10, 15.5, 21, 28, 36, 50, 68, 89, 111, 138],
+                ground: [5, 7, 9, 12, 15, 18, 24, 32, 42, 53, 73, 98, 125, 155, 180]
+            },
+            aluminum: {
+                air:    [2.3, 3.9, 5.5, 7, 9.4, 11.7, 15.2, 20.3, 26.5, 34.3, 47.6, 64, 84.2, 105, 131],
+                wall:   [1.9, 3.1, 4.7, 6.2, 7.8, 10.1, 12.9, 16.4, 21.8, 28.1, 39, 53, 69.4, 86.6, 108],
+                ground: [3.9, 5.5, 7, 9.4, 11.7, 14, 18.7, 25, 32.8, 41.3, 57, 76.4, 97.5, 121, 140]
+            }
+        };
+        const CONDUCTIVITY = { copper: 56, aluminum: 36 };
+        const VOLTAGE_DROP_LIMIT = 0.03; // 3%
+
+        // --- DOM Elements ---
+        const tabCurrent = document.getElementById('tab-current');
+        const tabDiameter = document.getElementById('tab-diameter');
+        const tabCrossSection = document.getElementById('tab-cross-section');
+
+        const panelCurrent = document.getElementById('panel-current');
+        const panelDiameter = document.getElementById('panel-diameter');
+        const panelCrossSection = document.getElementById('panel-cross-section');
+
+        const allInputs = {
+            current: document.getElementById('current'),
+            diameter: document.getElementById('diameter'),
+            crossSection: document.getElementById('cross-section'),
+            voltageCurrent: document.getElementById('voltage-current'),
+            voltageDiameter: document.getElementById('voltage-diameter'),
+            voltageCrossSection: document.getElementById('voltage-crossSection'),
+            lengthCurrent: document.getElementById('length-current'),
+            lengthDiameter: document.getElementById('length-diameter'),
+            lengthCrossSection: document.getElementById('length-crossSection'),
+        }
+
+        const materialSelects = {
+            current: document.getElementById('material-current'),
+            diameter: document.getElementById('material-diameter'),
+            crossSection: document.getElementById('material-cross-section')
+        };
+        const installationSelects = {
+            current: document.getElementById('installation-current'),
+            diameter: document.getElementById('installation-diameter'),
+            crossSection: document.getElementById('installation-cross-section')
+        };
+
+        const resultsContainer = document.getElementById('results-container');
+        const errorMessageDiv = document.getElementById('error-message');
+        
+        const resultContainers = {
+             crossSection: document.getElementById('result-cross-section-container'),
+             standardCrossSection: document.getElementById('result-standard-cross-section-container'),
+             diameter: document.getElementById('result-diameter-container'),
+             current: document.getElementById('result-current-container'),
+             voltagedrop: document.getElementById('result-voltagedrop-container')
+        };
+
+        const resultSpans = {
+            crossSection: document.getElementById('result-cross-section'),
+            standardCrossSection: document.getElementById('result-standard-cross-section'),
+            diameter: document.getElementById('result-diameter'),
+            current: document.getElementById('result-current'),
+            voltagedrop: document.getElementById('result-voltagedrop')
+        };
+
+        let activeTab = 'current';
+
+        // --- UI Functions ---
+        function showError(message) {
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.classList.remove('hidden');
+            resultsContainer.classList.add('hidden');
+        }
+
+        function hideError() {
+            errorMessageDiv.classList.add('hidden');
+        }
+
+        function clearInputsAndResults() {
+            allInputs.current.value = '';
+            allInputs.diameter.value = '';
+            allInputs.crossSection.value = '';
+            resultsContainer.classList.add('hidden');
+            hideError();
+        }
+
+        function switchTab(tab) {
+            activeTab = tab;
+            [tabCurrent, tabDiameter, tabCrossSection].forEach(t => t.classList.remove('active'));
+            [panelCurrent, panelDiameter, panelCrossSection].forEach(p => p.classList.add('hidden'));
+            
+            if (tab === 'current') {
+                tabCurrent.classList.add('active');
+                panelCurrent.classList.remove('hidden');
+            } else if (tab === 'diameter') {
+                tabDiameter.classList.add('active');
+                panelDiameter.classList.remove('hidden');
+            } else { // crossSection
+                tabCrossSection.classList.add('active');
+                panelCrossSection.classList.remove('hidden');
+            }
+            clearInputsAndResults();
+        }
+
+        function formatNumber(num) {
+            return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        
+        // --- Calculation Functions ---
+        function calculate() {
+            hideError();
+            resultsContainer.classList.add('hidden');
+
+            const tabKey = activeTab.charAt(0).toUpperCase() + activeTab.slice(1);
+            const voltage = parseFloat(allInputs[`voltage${tabKey}`].value);
+            const length = parseFloat(allInputs[`length${tabKey}`].value);
+            const material = materialSelects[activeTab].value;
+            const installation = installationSelects[activeTab].value;
+
+            if (activeTab === 'current') {
+                calculateFromCurrent(material, installation, voltage, length);
+            } else if (activeTab === 'diameter') {
+                calculateFromDiameter(material, installation, voltage, length);
+            } else {
+                calculateFromCrossSection(material, installation, voltage, length);
+            }
+        }
+        
+        function calculateFromCurrent(material, installation, voltage, length) {
+            const current = parseFloat(allInputs.current.value);
+            if (isNaN(current) || current <= 0 || isNaN(voltage) || isNaN(length) || voltage <= 0 || length <= 0) {
+                if (allInputs.current.value !== '') {
+                    showError("Bitte alle Felder ausfüllen.");
+                }
+                return;
+            }
+
+            // 1. Find required CS from thermal load
+            const capacityList = currentCapacity[material][installation];
+            let thermalCs = -1;
+            for (let i = 0; i < capacityList.length; i++) {
+                if (capacityList[i] >= current) {
+                    thermalCs = standardCrossSections[i];
+                    break;
+                }
+            }
+            if (thermalCs === -1) {
+                showError("Stromstärke zu hoch für Standardquerschnitte.");
+                return;
+            }
+
+            // 2. Find required CS from voltage drop
+            const kappa = CONDUCTIVITY[material];
+            const deltaU_abs = voltage * VOLTAGE_DROP_LIMIT;
+            const voltageDropCs = (2 * length * current) / (kappa * deltaU_abs);
+
+            // 3. Final CS is the one that satisfies both
+            let finalCs = -1;
+            for(const standardCs of standardCrossSections) {
+                if(standardCs >= thermalCs && standardCs >= voltageDropCs) {
+                    finalCs = standardCs;
+                    break;
+                }
+            }
+
+            if (finalCs === -1) {
+                showError("Kein passender Standardquerschnitt gefunden.");
+                return;
+            }
+
+            // 4. Calculate final values for display
+            const diameter = 2 * Math.sqrt(finalCs / Math.PI);
+            const actualVoltageDropV = (2 * length * current) / (kappa * finalCs);
+            const actualVoltageDropPercent = (actualVoltageDropV / voltage) * 100;
+
+            displayResults({
+                crossSection: finalCs,
+                diameter: diameter,
+                voltagedrop: { v: actualVoltageDropV, percent: actualVoltageDropPercent }
+            });
+        }
+
+        function calculateFromDiameter(material, installation, voltage, length) {
+            const diameter = parseFloat(allInputs.diameter.value);
+            if (isNaN(diameter) || diameter <= 0) {
+                if (allInputs.diameter.value !== '') showError("Bitte einen gültigen Durchmesser eingeben.");
+                return;
+            }
+            const crossSection = Math.PI * Math.pow(diameter / 2, 2);
+            
+            const nextStandard = standardCrossSections.find(cs => cs >= crossSection);
+
+            let results = {
+                crossSection: crossSection
+            };
+            
+            if (nextStandard) {
+                results.standardCrossSection = nextStandard;
+                 if (!isNaN(voltage) && !isNaN(length) && voltage > 0 && length > 0) {
+                     const sectionIndex = standardCrossSections.indexOf(nextStandard);
+                     // Verhindere Index-Out-of-Bounds, falls Querschnitt größer als in Liste
+                     if (sectionIndex === -1) {
+                        showError("Querschnitt zu groß für hinterlegte Tabellen.");
+                        return;
+                     }
+                     const maxCurrentThermal = currentCapacity[material][installation][sectionIndex];
+                     const kappa = CONDUCTIVITY[material];
+                     const deltaU_abs = voltage * VOLTAGE_DROP_LIMIT;
+                     const maxCurrentVoltage = (nextStandard * kappa * deltaU_abs) / (2 * length);
+                     const finalMaxCurrent = Math.min(maxCurrentThermal, maxCurrentVoltage);
+                     const actualVoltageDropV = (2 * length * finalMaxCurrent) / (kappa * nextStandard);
+                     const actualVoltageDropPercent = (actualVoltageDropV / voltage) * 100;
+                     
+                     results.maxCurrent = finalMaxCurrent;
+                     results.voltagedrop = { v: actualVoltageDropV, percent: actualVoltageDropPercent };
+                 }
+            }
+            
+            displayResults(results);
+        }
+
+        function calculateFromCrossSection(material, installation, voltage, length) {
+            const crossSection = parseFloat(allInputs.crossSection.value);
+            if (isNaN(crossSection) || crossSection <= 0) {
+                if (allInputs.crossSection.value !== '') showError("Bitte einen gültigen Querschnitt eingeben.");
+                return;
+            }
+
+            const diameter = 2 * Math.sqrt(crossSection / Math.PI);
+            const nextStandard = standardCrossSections.find(cs => cs >= crossSection);
+
+            let results = {
+                diameter: diameter
+            };
+
+            if (nextStandard) {
+                results.standardCrossSection = nextStandard;
+                if (!isNaN(voltage) && !isNaN(length) && voltage > 0 && length > 0) {
+                    const sectionIndex = standardCrossSections.indexOf(nextStandard);
+                     // Verhindere Index-Out-of-Bounds, falls Querschnitt größer als in Liste
+                    if (sectionIndex === -1) {
+                        showError("Querschnitt zu groß für hinterlegte Tabellen.");
+                        return;
+                    }
+                    const maxCurrentThermal = currentCapacity[material][installation][sectionIndex];
+                    const kappa = CONDUCTIVITY[material];
+                    const deltaU_abs = voltage * VOLTAGE_DROP_LIMIT;
+                    const maxCurrentVoltage = (nextStandard * kappa * deltaU_abs) / (2 * length);
+                    const finalMaxCurrent = Math.min(maxCurrentThermal, maxCurrentVoltage);
+                    const actualVoltageDropV = (2 * length * finalMaxCurrent) / (kappa * nextStandard);
+                    const actualVoltageDropPercent = (actualVoltageDropV / voltage) * 100;
+
+                    results.maxCurrent = finalMaxCurrent;
+                    results.voltagedrop = { v: actualVoltageDropV, percent: actualVoltageDropPercent };
+                }
+            }
+            displayResults(results);
+        }
+
+        function displayResults(results) {
+            const {crossSection, standardCrossSection, diameter, maxCurrent, voltagedrop} = results;
+            resultsContainer.classList.remove('hidden');
+            Object.values(resultContainers).forEach(c => c.classList.add('hidden'));
+
+            // Set all values that are available
+            if (crossSection !== undefined) resultSpans.crossSection.textContent = `${formatNumber(crossSection)} mm²`;
+            if (standardCrossSection !== undefined) {
+                resultSpans.standardCrossSection.textContent = `${standardCrossSection.toLocaleString('de-DE')} mm²`;
+                resultContainers.standardCrossSection.querySelector('span:first-child').innerHTML = 'Nächster Standard:<span class="text-xs font-normal text-gray-500 ml-1">(Basis f. Ber.)</span>';
+            }
+            if (diameter !== undefined) resultSpans.diameter.textContent = `${formatNumber(diameter)} mm`;
+            if (maxCurrent !== undefined) resultSpans.current.textContent = `${formatNumber(maxCurrent)} A`;
+            if (voltagedrop) resultSpans.voltagedrop.textContent = `${formatNumber(voltagedrop.v)} V (${formatNumber(voltagedrop.percent)} %)`;
+
+            // Now, set visibility based on active tab
+            if (activeTab === 'current') {
+                resultContainers.crossSection.classList.remove('hidden');
+                resultContainers.diameter.classList.remove('hidden');
+                // For current tab, the calculated crossSection is the standard one, so we rename it
+                resultContainers.crossSection.querySelector('span:first-child').textContent = 'Querschnitt (empfohlen):';
+                if (voltagedrop) resultContainers.voltagedrop.classList.remove('hidden');
+            } else if (activeTab === 'diameter') {
+                resultContainers.crossSection.querySelector('span:first-child').textContent = 'Querschnitt (errechnet):';
+                if (crossSection !== undefined) resultContainers.crossSection.classList.remove('hidden');
+                if (standardCrossSection !== undefined) resultContainers.standardCrossSection.classList.remove('hidden');
+                if (maxCurrent !== undefined) resultContainers.current.classList.remove('hidden');
+                if (voltagedrop) resultContainers.voltagedrop.classList.remove('hidden');
+            } else if (activeTab === 'crossSection') {
+                resultContainers.diameter.querySelector('span:first-child').textContent = 'Durchmesser (errechnet):';
+                if (diameter !== undefined) resultContainers.diameter.classList.remove('hidden');
+                if (standardCrossSection !== undefined) resultContainers.standardCrossSection.classList.remove('hidden');
+                if (maxCurrent !== undefined) resultContainers.current.classList.remove('hidden');
+                if (voltagedrop) resultContainers.voltagedrop.classList.remove('hidden');
+            }
+        }
+        
+        // --- Event Listeners ---
+        tabCurrent.addEventListener('click', () => switchTab('current'));
+        tabDiameter.addEventListener('click', () => switchTab('diameter'));
+        tabCrossSection.addEventListener('click', () => switchTab('crossSection'));
+
+        Object.values(allInputs).forEach(input => input.addEventListener('input', calculate));
+        Object.values(materialSelects).forEach(sel => sel.addEventListener('change', calculate));
+        Object.values(installationSelects).forEach(sel => sel.addEventListener('change', calculate));
+
+        function syncSelects(sourceKey, targetKey1, targetKey2, selectGroup) {
+            selectGroup[targetKey1].value = selectGroup[sourceKey].value;
+            selectGroup[targetKey2].value = selectGroup[sourceKey].value;
+            calculate();
+        }
+        function syncInputs(source, target1, target2) {
+             target1.value = source.value;
+             target2.value = source.value;
+             calculate();
+        }
+
+        materialSelects.current.addEventListener('change', () => syncSelects('current', 'diameter', 'crossSection', materialSelects));
+        materialSelects.diameter.addEventListener('change', () => syncSelects('diameter', 'current', 'crossSection', materialSelects));
+        materialSelects.crossSection.addEventListener('change', () => syncSelects('crossSection', 'current', 'diameter', materialSelects));
+
+        installationSelects.current.addEventListener('change', () => syncSelects('current', 'diameter', 'crossSection', installationSelects));
+        installationSelects.diameter.addEventListener('change', () => syncSelects('diameter', 'current', 'crossSection', installationSelects));
+        installationSelects.crossSection.addEventListener('change', () => syncSelects('crossSection', 'current', 'diameter', installationSelects));
+        
+        allInputs.voltageCurrent.addEventListener('input', () => syncInputs(allInputs.voltageCurrent, allInputs.voltageDiameter, allInputs.voltageCrossSection));
+        allInputs.voltageDiameter.addEventListener('input', () => syncInputs(allInputs.voltageDiameter, allInputs.voltageCurrent, allInputs.voltageCrossSection));
+        allInputs.voltageCrossSection.addEventListener('input', () => syncInputs(allInputs.voltageCrossSection, allInputs.voltageCurrent, allInputs.voltageDiameter));
+
+        allInputs.lengthCurrent.addEventListener('input', () => syncInputs(allInputs.lengthCurrent, allInputs.lengthDiameter, allInputs.lengthCrossSection));
+        allInputs.lengthDiameter.addEventListener('input', () => syncInputs(allInputs.lengthDiameter, allInputs.lengthCurrent, allInputs.lengthCrossSection));
+        allInputs.lengthCrossSection.addEventListener('input', () => syncInputs(allInputs.lengthCrossSection, allInputs.lengthCurrent, allInputs.lengthDiameter));
+
+        // --- Initial State ---
+        switchTab('current');
+        materialSelects.current.value = 'copper';
+        installationSelects.current.value = 'air';
+        syncSelects('current', 'diameter', 'crossSection', materialSelects);
+        syncSelects('current', 'diameter', 'crossSection', installationSelects);
+    </script>
+</body>
+</html>
