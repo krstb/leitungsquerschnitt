@@ -13,7 +13,6 @@
     <link rel="apple-touch-icon" href="icon-192.png">
 
     <script>
-      // Service Worker Registrierung
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('sw.js')
@@ -27,37 +26,30 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-
-        /* Fix für PWA-Ränder */
-    html {background-color: #000000 !important;}
-        
-        /* Using Inter font as the default */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Custom styles for input number spinners */
+        html {background-color: #000000 !important;}
+        body { font-family: 'Inter', sans-serif; }
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-         /* Styles for active and inactive tabs */
+        input[type=number] { -moz-appearance: textfield; }
+        
         .tab-btn.active {
             background-color: white;
-            color: #3B82F6; /* blue-500 */
-            border-color: #E5E7EB; /* gray-200 */
+            color: #3B82F6; 
+            border-color: #E5E7EB;
             border-bottom-color: white;
             margin-bottom: -1px;
         }
+        /* Sicherstellen, dass inaktive Tabs sichtbar sind */
         .tab-btn {
-            background-color: #F9FAFB; /* gray-50 */
+            background-color: #F9FAFB;
+            color: #4B5563; 
         }
     </style>
 </head>
-<body class="bg-gray-100 text-white flex items-start justify-center min-h-screen p-4 pt-10">
+<body class="bg-gray-100 text-gray-800 flex items-start justify-center min-h-screen p-4 pt-10">
 
     <div class="w-full max-w-lg mx-auto bg-white rounded-2xl shadow-lg p-3 md:p-4">
         
@@ -202,12 +194,10 @@
     </div>
 
     <script>
-        // --- Data ---
         const standardCrossSections = [0.14, 0.25, 0.34, 0.5, 0.75, 1.0, 1.5, 2.5, 4, 6, 10, 16, 25, 35, 50];
         const currentCapacity = {
             copper: {
                 air:    [3, 5, 7, 9, 12, 15, 19.5, 26, 34, 44, 61, 82, 108, 135, 168],
-                // KORRIGIERTER WERT: 1.0mm² (6. Wert) auf 10A, 1.5mm² (7. Wert) auf 15.5A
                 wall:   [2.5, 4, 6, 8, 10, 10, 15.5, 21, 28, 36, 50, 68, 89, 111, 138],
                 ground: [5, 7, 9, 12, 15, 18, 24, 32, 42, 53, 73, 98, 125, 155, 180]
             },
@@ -218,13 +208,11 @@
             }
         };
         const CONDUCTIVITY = { copper: 56, aluminum: 36 };
-        const VOLTAGE_DROP_LIMIT = 0.03; // 3%
+        const VOLTAGE_DROP_LIMIT = 0.03;
 
-        // --- DOM Elements ---
         const tabCurrent = document.getElementById('tab-current');
         const tabDiameter = document.getElementById('tab-diameter');
         const tabCrossSection = document.getElementById('tab-cross-section');
-
         const panelCurrent = document.getElementById('panel-current');
         const panelDiameter = document.getElementById('panel-diameter');
         const panelCrossSection = document.getElementById('panel-cross-section');
@@ -255,14 +243,6 @@
         const resultsContainer = document.getElementById('results-container');
         const errorMessageDiv = document.getElementById('error-message');
         
-        const resultContainers = {
-             crossSection: document.getElementById('result-cross-section-container'),
-             standardCrossSection: document.getElementById('result-standard-cross-section-container'),
-             diameter: document.getElementById('result-diameter-container'),
-             current: document.getElementById('result-current-container'),
-             voltagedrop: document.getElementById('result-voltagedrop-container')
-        };
-
         const resultSpans = {
             crossSection: document.getElementById('result-cross-section'),
             standardCrossSection: document.getElementById('result-standard-cross-section'),
@@ -271,54 +251,28 @@
             voltagedrop: document.getElementById('result-voltagedrop')
         };
 
+        const resultContainers = {
+             crossSection: document.getElementById('result-cross-section-container'),
+             standardCrossSection: document.getElementById('result-standard-cross-section-container'),
+             diameter: document.getElementById('result-diameter-container'),
+             current: document.getElementById('result-current-container'),
+             voltagedrop: document.getElementById('result-voltagedrop-container')
+        };
+
         let activeTab = 'current';
-
-        // --- UI Functions ---
-        function showError(message) {
-            errorMessageDiv.textContent = message;
-            errorMessageDiv.classList.remove('hidden');
-            resultsContainer.classList.add('hidden');
-        }
-
-        function hideError() {
-            errorMessageDiv.classList.add('hidden');
-        }
-
-        function clearInputsAndResults() {
-            allInputs.current.value = '';
-            allInputs.diameter.value = '';
-            allInputs.crossSection.value = '';
-            resultsContainer.classList.add('hidden');
-            hideError();
-        }
 
         function switchTab(tab) {
             activeTab = tab;
             [tabCurrent, tabDiameter, tabCrossSection].forEach(t => t.classList.remove('active'));
             [panelCurrent, panelDiameter, panelCrossSection].forEach(p => p.classList.add('hidden'));
-            
-            if (tab === 'current') {
-                tabCurrent.classList.add('active');
-                panelCurrent.classList.remove('hidden');
-            } else if (tab === 'diameter') {
-                tabDiameter.classList.add('active');
-                panelDiameter.classList.remove('hidden');
-            } else { // crossSection
-                tabCrossSection.classList.add('active');
-                panelCrossSection.classList.remove('hidden');
-            }
-            clearInputsAndResults();
-        }
-
-        function formatNumber(num) {
-            return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-        
-        // --- Calculation Functions ---
-        function calculate() {
-            hideError();
+            if (tab === 'current') { tabCurrent.classList.add('active'); panelCurrent.classList.remove('hidden'); }
+            else if (tab === 'diameter') { tabDiameter.classList.add('active'); panelDiameter.classList.remove('hidden'); }
+            else { tabCrossSection.classList.add('active'); panelCrossSection.classList.remove('hidden'); }
             resultsContainer.classList.add('hidden');
+        }
 
+        function calculate() {
+            errorMessageDiv.classList.add('hidden');
             const tabKey = activeTab.charAt(0).toUpperCase() + activeTab.slice(1);
             const voltage = parseFloat(allInputs[`voltage${tabKey}`].value);
             const length = parseFloat(allInputs[`length${tabKey}`].value);
@@ -326,226 +280,57 @@
             const installation = installationSelects[activeTab].value;
 
             if (activeTab === 'current') {
-                calculateFromCurrent(material, installation, voltage, length);
-            } else if (activeTab === 'diameter') {
-                calculateFromDiameter(material, installation, voltage, length);
+                const current = parseFloat(allInputs.current.value);
+                if (isNaN(current) || current <= 0) return;
+                const capacityList = currentCapacity[material][installation];
+                let thermalCs = standardCrossSections.find((cs, i) => capacityList[i] >= current);
+                if (!thermalCs) return;
+                const vDropCs = (2 * length * current) / (CONDUCTIVITY[material] * (voltage * VOLTAGE_DROP_LIMIT));
+                let finalCs = standardCrossSections.find(cs => cs >= thermalCs && cs >= vDropCs);
+                if (!finalCs) return;
+                displayResults({ crossSection: finalCs, diameter: 2 * Math.sqrt(finalCs / Math.PI), voltagedrop: { v: (2 * length * current) / (CONDUCTIVITY[material] * finalCs), percent: (((2 * length * current) / (CONDUCTIVITY[material] * finalCs)) / voltage) * 100 } });
             } else {
-                calculateFromCrossSection(material, installation, voltage, length);
-            }
-        }
-        
-        function calculateFromCurrent(material, installation, voltage, length) {
-            const current = parseFloat(allInputs.current.value);
-            if (isNaN(current) || current <= 0 || isNaN(voltage) || isNaN(length) || voltage <= 0 || length <= 0) {
-                if (allInputs.current.value !== '') {
-                    showError("Bitte alle Felder ausfüllen.");
+                let cs = activeTab === 'diameter' ? Math.PI * Math.pow(parseFloat(allInputs.diameter.value) / 2, 2) : parseFloat(allInputs.crossSection.value);
+                if (isNaN(cs) || cs <= 0) return;
+                const std = standardCrossSections.find(s => s >= cs);
+                let res = { crossSection: cs, diameter: 2 * Math.sqrt(cs / Math.PI) };
+                if (std) {
+                    res.standardCrossSection = std;
+                    const maxI = Math.min(currentCapacity[material][installation][standardCrossSections.indexOf(std)], (std * CONDUCTIVITY[material] * (voltage * VOLTAGE_DROP_LIMIT)) / (2 * length));
+                    res.maxCurrent = maxI;
+                    res.voltagedrop = { v: (2 * length * maxI) / (CONDUCTIVITY[material] * std), percent: (((2 * length * maxI) / (CONDUCTIVITY[material] * std)) / voltage) * 100 };
                 }
-                return;
+                displayResults(res);
             }
-
-            // 1. Find required CS from thermal load
-            const capacityList = currentCapacity[material][installation];
-            let thermalCs = -1;
-            for (let i = 0; i < capacityList.length; i++) {
-                if (capacityList[i] >= current) {
-                    thermalCs = standardCrossSections[i];
-                    break;
-                }
-            }
-            if (thermalCs === -1) {
-                showError("Stromstärke zu hoch für Standardquerschnitte.");
-                return;
-            }
-
-            // 2. Find required CS from voltage drop
-            const kappa = CONDUCTIVITY[material];
-            const deltaU_abs = voltage * VOLTAGE_DROP_LIMIT;
-            const voltageDropCs = (2 * length * current) / (kappa * deltaU_abs);
-
-            // 3. Final CS is the one that satisfies both
-            let finalCs = -1;
-            for(const standardCs of standardCrossSections) {
-                if(standardCs >= thermalCs && standardCs >= voltageDropCs) {
-                    finalCs = standardCs;
-                    break;
-                }
-            }
-
-            if (finalCs === -1) {
-                showError("Kein passender Standardquerschnitt gefunden.");
-                return;
-            }
-
-            // 4. Calculate final values for display
-            const diameter = 2 * Math.sqrt(finalCs / Math.PI);
-            const actualVoltageDropV = (2 * length * current) / (kappa * finalCs);
-            const actualVoltageDropPercent = (actualVoltageDropV / voltage) * 100;
-
-            displayResults({
-                crossSection: finalCs,
-                diameter: diameter,
-                voltagedrop: { v: actualVoltageDropV, percent: actualVoltageDropPercent }
-            });
-        }
-
-        function calculateFromDiameter(material, installation, voltage, length) {
-            const diameter = parseFloat(allInputs.diameter.value);
-            if (isNaN(diameter) || diameter <= 0) {
-                if (allInputs.diameter.value !== '') showError("Bitte einen gültigen Durchmesser eingeben.");
-                return;
-            }
-            const crossSection = Math.PI * Math.pow(diameter / 2, 2);
-            
-            const nextStandard = standardCrossSections.find(cs => cs >= crossSection);
-
-            let results = {
-                crossSection: crossSection
-            };
-            
-            if (nextStandard) {
-                results.standardCrossSection = nextStandard;
-                 if (!isNaN(voltage) && !isNaN(length) && voltage > 0 && length > 0) {
-                     const sectionIndex = standardCrossSections.indexOf(nextStandard);
-                     // Verhindere Index-Out-of-Bounds, falls Querschnitt größer als in Liste
-                     if (sectionIndex === -1) {
-                        showError("Querschnitt zu groß für hinterlegte Tabellen.");
-                        return;
-                     }
-                     const maxCurrentThermal = currentCapacity[material][installation][sectionIndex];
-                     const kappa = CONDUCTIVITY[material];
-                     const deltaU_abs = voltage * VOLTAGE_DROP_LIMIT;
-                     const maxCurrentVoltage = (nextStandard * kappa * deltaU_abs) / (2 * length);
-                     const finalMaxCurrent = Math.min(maxCurrentThermal, maxCurrentVoltage);
-                     const actualVoltageDropV = (2 * length * finalMaxCurrent) / (kappa * nextStandard);
-                     const actualVoltageDropPercent = (actualVoltageDropV / voltage) * 100;
-                     
-                     results.maxCurrent = finalMaxCurrent;
-                     results.voltagedrop = { v: actualVoltageDropV, percent: actualVoltageDropPercent };
-                 }
-            }
-            
-            displayResults(results);
-        }
-
-        function calculateFromCrossSection(material, installation, voltage, length) {
-            const crossSection = parseFloat(allInputs.crossSection.value);
-            if (isNaN(crossSection) || crossSection <= 0) {
-                if (allInputs.crossSection.value !== '') showError("Bitte einen gültigen Querschnitt eingeben.");
-                return;
-            }
-
-            const diameter = 2 * Math.sqrt(crossSection / Math.PI);
-            const nextStandard = standardCrossSections.find(cs => cs >= crossSection);
-
-            let results = {
-                diameter: diameter
-            };
-
-            if (nextStandard) {
-                results.standardCrossSection = nextStandard;
-                if (!isNaN(voltage) && !isNaN(length) && voltage > 0 && length > 0) {
-                    const sectionIndex = standardCrossSections.indexOf(nextStandard);
-                     // Verhindere Index-Out-of-Bounds, falls Querschnitt größer als in Liste
-                    if (sectionIndex === -1) {
-                        showError("Querschnitt zu groß für hinterlegte Tabellen.");
-                        return;
-                    }
-                    const maxCurrentThermal = currentCapacity[material][installation][sectionIndex];
-                    const kappa = CONDUCTIVITY[material];
-                    const deltaU_abs = voltage * VOLTAGE_DROP_LIMIT;
-                    const maxCurrentVoltage = (nextStandard * kappa * deltaU_abs) / (2 * length);
-                    const finalMaxCurrent = Math.min(maxCurrentThermal, maxCurrentVoltage);
-                    const actualVoltageDropV = (2 * length * finalMaxCurrent) / (kappa * nextStandard);
-                    const actualVoltageDropPercent = (actualVoltageDropV / voltage) * 100;
-
-                    results.maxCurrent = finalMaxCurrent;
-                    results.voltagedrop = { v: actualVoltageDropV, percent: actualVoltageDropPercent };
-                }
-            }
-            displayResults(results);
         }
 
         function displayResults(results) {
-            const {crossSection, standardCrossSection, diameter, maxCurrent, voltagedrop} = results;
             resultsContainer.classList.remove('hidden');
             Object.values(resultContainers).forEach(c => c.classList.add('hidden'));
-
-            // Set all values that are available
-            if (crossSection !== undefined) resultSpans.crossSection.textContent = `${formatNumber(crossSection)} mm²`;
-            if (standardCrossSection !== undefined) {
-                resultSpans.standardCrossSection.textContent = `${standardCrossSection.toLocaleString('de-DE')} mm²`;
-                resultContainers.standardCrossSection.querySelector('span:first-child').innerHTML = 'Nächster Standard:<span class="text-xs font-normal text-gray-500 ml-1">(Basis f. Ber.)</span>';
-            }
-            if (diameter !== undefined) resultSpans.diameter.textContent = `${formatNumber(diameter)} mm`;
-            if (maxCurrent !== undefined) resultSpans.current.textContent = `${formatNumber(maxCurrent)} A`;
-            if (voltagedrop) resultSpans.voltagedrop.textContent = `${formatNumber(voltagedrop.v)} V (${formatNumber(voltagedrop.percent)} %)`;
-
-            // Now, set visibility based on active tab
+            if (results.crossSection) resultSpans.crossSection.textContent = `${results.crossSection.toLocaleString('de-DE', {maximumFractionDigits:2})} mm²`;
+            if (results.standardCrossSection) resultSpans.standardCrossSection.textContent = `${results.standardCrossSection} mm²`;
+            if (results.diameter) resultSpans.diameter.textContent = `${results.diameter.toLocaleString('de-DE', {maximumFractionDigits:2})} mm`;
+            if (results.maxCurrent) resultSpans.current.textContent = `${results.maxCurrent.toLocaleString('de-DE', {maximumFractionDigits:2})} A`;
+            if (results.voltagedrop) resultSpans.voltagedrop.textContent = `${results.voltagedrop.v.toLocaleString('de-DE', {maximumFractionDigits:2})} V (${results.voltagedrop.percent.toLocaleString('de-DE', {maximumFractionDigits:2})} %)`;
+            
             if (activeTab === 'current') {
                 resultContainers.crossSection.classList.remove('hidden');
                 resultContainers.diameter.classList.remove('hidden');
-                // For current tab, the calculated crossSection is the standard one, so we rename it
-                resultContainers.crossSection.querySelector('span:first-child').textContent = 'Querschnitt (empfohlen):';
-                if (voltagedrop) resultContainers.voltagedrop.classList.remove('hidden');
-            } else if (activeTab === 'diameter') {
-                resultContainers.crossSection.querySelector('span:first-child').textContent = 'Querschnitt (errechnet):';
-                if (crossSection !== undefined) resultContainers.crossSection.classList.remove('hidden');
-                if (standardCrossSection !== undefined) resultContainers.standardCrossSection.classList.remove('hidden');
-                if (maxCurrent !== undefined) resultContainers.current.classList.remove('hidden');
-                if (voltagedrop) resultContainers.voltagedrop.classList.remove('hidden');
-            } else if (activeTab === 'crossSection') {
-                resultContainers.diameter.querySelector('span:first-child').textContent = 'Durchmesser (errechnet):';
-                if (diameter !== undefined) resultContainers.diameter.classList.remove('hidden');
-                if (standardCrossSection !== undefined) resultContainers.standardCrossSection.classList.remove('hidden');
-                if (maxCurrent !== undefined) resultContainers.current.classList.remove('hidden');
-                if (voltagedrop) resultContainers.voltagedrop.classList.remove('hidden');
+                resultContainers.voltagedrop.classList.remove('hidden');
+            } else {
+                resultContainers.standardCrossSection.classList.remove('hidden');
+                resultContainers.current.classList.remove('hidden');
+                resultContainers.voltagedrop.classList.remove('hidden');
+                if (activeTab === 'diameter') resultContainers.crossSection.classList.remove('hidden');
+                else resultContainers.diameter.classList.remove('hidden');
             }
         }
-        
-        // --- Event Listeners ---
+
         tabCurrent.addEventListener('click', () => switchTab('current'));
         tabDiameter.addEventListener('click', () => switchTab('diameter'));
         tabCrossSection.addEventListener('click', () => switchTab('crossSection'));
-
-        Object.values(allInputs).forEach(input => input.addEventListener('input', calculate));
-        Object.values(materialSelects).forEach(sel => sel.addEventListener('change', calculate));
-        Object.values(installationSelects).forEach(sel => sel.addEventListener('change', calculate));
-
-        function syncSelects(sourceKey, targetKey1, targetKey2, selectGroup) {
-            selectGroup[targetKey1].value = selectGroup[sourceKey].value;
-            selectGroup[targetKey2].value = selectGroup[sourceKey].value;
-            calculate();
-        }
-        function syncInputs(source, target1, target2) {
-             target1.value = source.value;
-             target2.value = source.value;
-             calculate();
-        }
-
-        materialSelects.current.addEventListener('change', () => syncSelects('current', 'diameter', 'crossSection', materialSelects));
-        materialSelects.diameter.addEventListener('change', () => syncSelects('diameter', 'current', 'crossSection', materialSelects));
-        materialSelects.crossSection.addEventListener('change', () => syncSelects('crossSection', 'current', 'diameter', materialSelects));
-
-        installationSelects.current.addEventListener('change', () => syncSelects('current', 'diameter', 'crossSection', installationSelects));
-        installationSelects.diameter.addEventListener('change', () => syncSelects('diameter', 'current', 'crossSection', installationSelects));
-        installationSelects.crossSection.addEventListener('change', () => syncSelects('crossSection', 'current', 'diameter', installationSelects));
-        
-        allInputs.voltageCurrent.addEventListener('input', () => syncInputs(allInputs.voltageCurrent, allInputs.voltageDiameter, allInputs.voltageCrossSection));
-        allInputs.voltageDiameter.addEventListener('input', () => syncInputs(allInputs.voltageDiameter, allInputs.voltageCurrent, allInputs.voltageCrossSection));
-        allInputs.voltageCrossSection.addEventListener('input', () => syncInputs(allInputs.voltageCrossSection, allInputs.voltageCurrent, allInputs.voltageDiameter));
-
-        allInputs.lengthCurrent.addEventListener('input', () => syncInputs(allInputs.lengthCurrent, allInputs.lengthDiameter, allInputs.lengthCrossSection));
-        allInputs.lengthDiameter.addEventListener('input', () => syncInputs(allInputs.lengthDiameter, allInputs.lengthCurrent, allInputs.lengthCrossSection));
-        allInputs.lengthCrossSection.addEventListener('input', () => syncInputs(allInputs.lengthCrossSection, allInputs.lengthCurrent, allInputs.lengthDiameter));
-
-        // --- Initial State ---
+        document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', calculate));
         switchTab('current');
-        materialSelects.current.value = 'copper';
-        installationSelects.current.value = 'air';
-        syncSelects('current', 'diameter', 'crossSection', materialSelects);
-        syncSelects('current', 'diameter', 'crossSection', installationSelects);
     </script>
 </body>
-
 </html>
-
