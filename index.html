@@ -28,8 +28,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        
-       
     /* Fix für PWA-Ränder */
         html {background-color: #000000 !important;
               overscroll-behavior-y: none;
@@ -83,91 +81,50 @@
         </div>
 
         <div>
+            <!-- Tabs für die spezifische Eingabe -->
             <div id="panel-current">
                 <div class="flex items-center justify-between gap-2 mb-2">
                     <label for="current" class="text-sm font-medium text-gray-700">Stromstärke (in A)</label>
                     <input type="number" id="current" placeholder="z.B. 16" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
-                </div>
-                <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="voltage-current" class="text-sm font-medium text-gray-700">Spannung (in V)</label>
-                    <input type="number" id="voltage-current" value="12" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
-                </div>
-                <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="length-current" class="text-sm font-medium text-gray-700">Länge (in m)</label>
-                    <input type="number" id="length-current" value="1" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
-                </div>
-                <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="material-current" class="text-sm font-medium text-gray-700">Material</label>
-                    <select id="material-current" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
-                        <option value="copper">Kupfer</option>
-                        <option value="aluminum">Aluminium</option>
-                    </select>
-                </div>
-                <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="installation-current" class="text-sm font-medium text-gray-700">Verlegeart</label>
-                    <select id="installation-current" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
-                        <option value="air">Frei in der Luft</option>
-                        <option value="wall">In oder an der Wand</option>
-                        <option value="ground">Im Erdboden</option>
-                    </select>
                 </div>
             </div>
 
             <div id="panel-diameter" class="hidden">
                 <div class="flex items-center justify-between gap-2 mb-2">
                     <label for="diameter" class="text-sm font-medium text-gray-700">Durchmesser (in mm)</label>
-                    <input type="number" id="diameter" placeholder="z.B. 1.38" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
-                </div>
-                <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="voltage-diameter" class="text-sm font-medium text-gray-700">Spannung (in V)</label>
-                    <input type="number" id="voltage-diameter" value="12" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
-                </div>
-                <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="length-diameter" class="text-sm font-medium text-gray-700">Länge (in m)</label>
-                    <input type="number" id="length-diameter" value="1" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
-                </div>
-                 <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="material-diameter" class="text-sm font-medium text-gray-700">Material</label>
-                    <select id="material-diameter" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
-                        <option value="copper">Kupfer</option>
-                        <option value="aluminum">Aluminium</option>
-                    </select>
-                </div>
-                <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="installation-diameter" class="text-sm font-medium text-gray-700">Verlegeart</label>
-                    <select id="installation-diameter" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
-                        <option value="air">Frei in der Luft</option>
-                        <option value="wall">In oder an der Wand</option>
-                        <option value="ground">Im Erdboden</option>
-                    </select>
+                    <input type="number" id="diameter" placeholder="z.B. 1,38" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
                 </div>
             </div>
             
             <div id="panel-cross-section" class="hidden">
                  <div class="flex items-center justify-between gap-2 mb-2">
                     <label for="cross-section" class="text-sm font-medium text-gray-700">Querschnitt (in mm²)</label>
-                    <input type="number" id="cross-section" placeholder="z.B. 1.5" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                    <input type="number" id="cross-section" placeholder="z.B. 1,5" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
                 </div>
-                 <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="voltage-crossSection" class="text-sm font-medium text-gray-700">Spannung (in V)</label>
-                    <input type="number" id="voltage-crossSection" value="12" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+            </div>
+
+            <!-- Gemeinsame Parameter (bleiben beim Tab-Wechsel erhalten und sichtbar) -->
+            <div class="border-t border-gray-200 pt-2 mt-2">
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="voltage" class="text-sm font-medium text-gray-700">Spannung (in V)</label>
+                    <input type="number" id="voltage" value="12" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
                 </div>
                 <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="length-crossSection" class="text-sm font-medium text-gray-700">Länge (in m)</label>
-                    <input type="number" id="length-crossSection" value="1" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                    <label for="length" class="text-sm font-medium text-gray-700">Länge (in m)</label>
+                    <input type="number" id="length" value="1" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
                 </div>
-                 <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="material-cross-section" class="text-sm font-medium text-gray-700">Material</label>
-                    <select id="material-cross-section" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <label for="material" class="text-sm font-medium text-gray-700">Material</label>
+                    <select id="material" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
                         <option value="copper">Kupfer</option>
                         <option value="aluminum">Aluminium</option>
                     </select>
                 </div>
                 <div class="flex items-center justify-between gap-2 mb-2">
-                    <label for="installation-cross-section" class="text-sm font-medium text-gray-700">Verlegeart</label>
-                    <select id="installation-cross-section" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
+                    <label for="installation" class="text-sm font-medium text-gray-700">Verlegeart</label>
+                    <select id="installation" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
                         <option value="air">Frei in der Luft</option>
-                        <option value="wall">In oder an der Wand</option>
+                        <option value="wall">In o. an Wand</option>
                         <option value="ground">Im Erdboden</option>
                     </select>
                 </div>
@@ -231,24 +188,12 @@
             current: document.getElementById('current'),
             diameter: document.getElementById('diameter'),
             crossSection: document.getElementById('cross-section'),
-            voltageCurrent: document.getElementById('voltage-current'),
-            voltageDiameter: document.getElementById('voltage-diameter'),
-            voltageCrossSection: document.getElementById('voltage-crossSection'),
-            lengthCurrent: document.getElementById('length-current'),
-            lengthDiameter: document.getElementById('length-diameter'),
-            lengthCrossSection: document.getElementById('length-crossSection'),
+            voltage: document.getElementById('voltage'),
+            length: document.getElementById('length'),
         }
 
-        const materialSelects = {
-            current: document.getElementById('material-current'),
-            diameter: document.getElementById('material-diameter'),
-            crossSection: document.getElementById('material-cross-section')
-        };
-        const installationSelects = {
-            current: document.getElementById('installation-current'),
-            diameter: document.getElementById('installation-diameter'),
-            crossSection: document.getElementById('installation-cross-section')
-        };
+        const materialSelect = document.getElementById('material');
+        const installationSelect = document.getElementById('installation');
 
         const resultsContainer = document.getElementById('results-container');
         const errorMessageDiv = document.getElementById('error-message');
@@ -278,20 +223,26 @@
             if (tab === 'current') { tabCurrent.classList.add('active'); panelCurrent.classList.remove('hidden'); }
             else if (tab === 'diameter') { tabDiameter.classList.add('active'); panelDiameter.classList.remove('hidden'); }
             else { tabCrossSection.classList.add('active'); panelCrossSection.classList.remove('hidden'); }
-            resultsContainer.classList.add('hidden');
+            
+            // Sofort neu berechnen, damit das Ergebnis zum aktiven Tab passt
+            calculate();
         }
 
         function calculate() {
             errorMessageDiv.classList.add('hidden');
-            const tabKey = activeTab.charAt(0).toUpperCase() + activeTab.slice(1);
-            const voltage = parseFloat(allInputs[`voltage${tabKey}`].value);
-            const length = parseFloat(allInputs[`length${tabKey}`].value);
-            const material = materialSelects[activeTab].value;
-            const installation = installationSelects[activeTab].value;
+            const voltage = parseFloat(allInputs.voltage.value);
+            const length = parseFloat(allInputs.length.value);
+            const material = materialSelect.value;
+            const installation = installationSelect.value;
+
+            if (isNaN(voltage) || voltage <= 0 || isNaN(length) || length <= 0) return;
 
             if (activeTab === 'current') {
                 const current = parseFloat(allInputs.current.value);
-                if (isNaN(current) || current <= 0) return;
+                if (isNaN(current) || current <= 0) {
+                    resultsContainer.classList.add('hidden');
+                    return;
+                }
                 const capacityList = currentCapacity[material][installation];
                 let thermalCs = standardCrossSections.find((cs, i) => capacityList[i] >= current);
                 if (!thermalCs) return;
@@ -301,7 +252,10 @@
                 displayResults({ crossSection: finalCs, diameter: 2 * Math.sqrt(finalCs / Math.PI), voltagedrop: { v: (2 * length * current) / (CONDUCTIVITY[material] * finalCs), percent: (((2 * length * current) / (CONDUCTIVITY[material] * finalCs)) / voltage) * 100 } });
             } else {
                 let cs = activeTab === 'diameter' ? Math.PI * Math.pow(parseFloat(allInputs.diameter.value) / 2, 2) : parseFloat(allInputs.crossSection.value);
-                if (isNaN(cs) || cs <= 0) return;
+                if (isNaN(cs) || cs <= 0) {
+                    resultsContainer.classList.add('hidden');
+                    return;
+                }
                 const std = standardCrossSections.find(s => s >= cs);
                 let res = { crossSection: cs, diameter: 2 * Math.sqrt(cs / Math.PI) };
                 if (std) {
@@ -318,7 +272,7 @@
             resultsContainer.classList.remove('hidden');
             Object.values(resultContainers).forEach(c => c.classList.add('hidden'));
             if (results.crossSection) resultSpans.crossSection.textContent = `${results.crossSection.toLocaleString('de-DE', {maximumFractionDigits:2})} mm²`;
-            if (results.standardCrossSection) resultSpans.standardCrossSection.textContent = `${results.standardCrossSection} mm²`;
+            if (results.standardCrossSection) resultSpans.standardCrossSection.textContent = `${results.standardCrossSection.toLocaleString('de-DE')} mm²`;
             if (results.diameter) resultSpans.diameter.textContent = `${results.diameter.toLocaleString('de-DE', {maximumFractionDigits:2})} mm`;
             if (results.maxCurrent) resultSpans.current.textContent = `${results.maxCurrent.toLocaleString('de-DE', {maximumFractionDigits:2})} A`;
             if (results.voltagedrop) resultSpans.voltagedrop.textContent = `${results.voltagedrop.v.toLocaleString('de-DE', {maximumFractionDigits:2})} V (${results.voltagedrop.percent.toLocaleString('de-DE', {maximumFractionDigits:2})} %)`;
