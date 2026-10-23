@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leitungsquerschnitt</title>
-
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-192.png"> 
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -13,7 +12,6 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="apple-touch-icon" href="icon-192.png">
-
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -22,20 +20,20 @@
         });
       }
     </script>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-    /* Fix für PWA-Ränder */
-        html {background-color: #000000 !important;
-              overscroll-behavior-y: none;
+        /* Fix für PWA-Ränder */
+        html {
+            background-color: #000000 !important;
+            overscroll-behavior-y: none;
         }
-        
-        body {background-color: #3289D1;
-            font-family: 'Inter', sans-serif;
-             }
+        body {
+            background-color: #3289D1;
+            font-family: 'Inter', sans-serif; 
+        }
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -57,13 +55,11 @@
         }
     </style>
 </head>
-<body class="min-h-screen w-full flex text-gray-800 flex items-start justify-center p-4 pt-4">
- 
+<body class="min-h-screen w-full flex text-gray-800 items-start justify-center p-4 pt-4">
     <div class="w-full max-w-lg mx-auto bg-white rounded-2xl shadow-lg p-3 md:p-4">
-        
         <div class="text-center mb-4">
             <h1 class="text-xl md:text-2xl font-bold text-gray-800">Leitungsquerschnitt</h1>
-            <p class="text-gray-500 text-sm mt-1">Inkl. Spannungsfall-Berechnung</p>
+            <p class="text-gray-500 text-sm mt-1">Inkl. Spannungsabfall-Berechnung</p>
         </div>
 
         <div class="mb-2 border-b border-gray-200">
@@ -73,8 +69,8 @@
                 </button>
                 <button id="tab-diameter" class="tab-btn py-1 px-2 border text-sm font-medium rounded-t-lg focus:outline-none">
                     Nach ø
-                </button>
-                 <button id="tab-cross-section" class="tab-btn py-1 px-2 border text-sm font-medium rounded-t-lg focus:outline-none">
+                </button> 
+                <button id="tab-cross-section" class="tab-btn py-1 px-2 border text-sm font-medium rounded-t-lg focus:outline-none">
                     Nach mm²
                 </button>
             </nav>
@@ -85,33 +81,33 @@
             <div id="panel-current">
                 <div class="flex items-center justify-between gap-2 mb-2">
                     <label for="current" class="text-sm font-medium text-gray-700">Stromstärke (in A)</label>
-                    <input type="number" id="current" placeholder="z.B. 16" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                    <input type="text" id="current" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="z.B. 16" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
                 </div>
             </div>
 
             <div id="panel-diameter" class="hidden">
                 <div class="flex items-center justify-between gap-2 mb-2">
                     <label for="diameter" class="text-sm font-medium text-gray-700">Durchmesser (in mm)</label>
-                    <input type="number" id="diameter" placeholder="z.B. 1,38" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                    <input type="text" id="diameter" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="z.B. 1,38" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
                 </div>
             </div>
             
             <div id="panel-cross-section" class="hidden">
-                 <div class="flex items-center justify-between gap-2 mb-2">
+                <div class="flex items-center justify-between gap-2 mb-2">
                     <label for="cross-section" class="text-sm font-medium text-gray-700">Querschnitt (in mm²)</label>
-                    <input type="number" id="cross-section" placeholder="z.B. 1,5" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                    <input type="text" id="cross-section" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="z.B. 1,5" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
                 </div>
             </div>
 
-            <!-- Gemeinsame Parameter (bleiben beim Tab-Wechsel erhalten und sichtbar) -->
+            <!-- Gemeinsame Parameter -->
             <div class="border-t border-gray-200 pt-2 mt-2">
                 <div class="flex items-center justify-between gap-2 mb-2">
                     <label for="voltage" class="text-sm font-medium text-gray-700">Spannung (in V)</label>
-                    <input type="number" id="voltage" value="12" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                    <input type="text" id="voltage" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" value="12" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
                 </div>
                 <div class="flex items-center justify-between gap-2 mb-2">
                     <label for="length" class="text-sm font-medium text-gray-700">Länge (in m)</label>
-                    <input type="number" id="length" value="1" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]" min="0">
+                    <input type="text" id="length" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" value="1" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
                 </div>
                 <div class="flex items-center justify-between gap-2 mb-2">
                     <label for="material" class="text-sm font-medium text-gray-700">Material</label>
@@ -131,7 +127,7 @@
             </div>
         </div>
 
-         <div id="error-message" class="text-red-500 text-center text-sm mt-4 font-medium hidden"></div>
+        <div id="error-message" class="text-red-500 text-center text-sm mt-4 font-medium hidden"></div>
 
         <div id="results-container" class="mt-4 pt-3 border-t border-gray-200 hidden">
             <h2 class="text-lg font-semibold text-center text-gray-800 mb-2">Ergebnis</h2>
@@ -190,7 +186,7 @@
             crossSection: document.getElementById('cross-section'),
             voltage: document.getElementById('voltage'),
             length: document.getElementById('length'),
-        }
+        };
 
         const materialSelect = document.getElementById('material');
         const installationSelect = document.getElementById('installation');
@@ -206,15 +202,86 @@
             voltagedrop: document.getElementById('result-voltagedrop')
         };
 
-        const resultContainers = {
-             crossSection: document.getElementById('result-cross-section-container'),
-             standardCrossSection: document.getElementById('result-standard-cross-section-container'),
-             diameter: document.getElementById('result-diameter-container'),
-             current: document.getElementById('result-current-container'),
-             voltagedrop: document.getElementById('result-voltagedrop-container')
+        const resultContainers = { 
+            crossSection: document.getElementById('result-cross-section-container'), 
+            standardCrossSection: document.getElementById('result-standard-cross-section-container'), 
+            diameter: document.getElementById('result-diameter-container'), 
+            current: document.getElementById('result-current-container'), 
+            voltagedrop: document.getElementById('result-voltagedrop-container')
         };
 
         let activeTab = 'current';
+
+        // --- Hilfsfunktionen für deutsches Zahlenformat ---
+        function parseGermanFloat(str) {
+            if (typeof str !== 'string') return NaN;
+            const cleaned = str.replace(/\./g, '').replace(',', '.');
+            if (cleaned.trim() === '') return NaN;
+            return parseFloat(cleaned);
+        }
+
+        function formatToGermanString(num, decimals) {
+            if (typeof num !== 'number' || isNaN(num)) return '';
+            return new Intl.NumberFormat('de-DE', {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
+            }).format(num);
+        }
+
+        // Wandelt getippte Punkte sofort in ein Komma um, lässt den Wert sonst unformatiert
+        function handleInput(e) {
+            let cursorPosition = e.target.selectionStart;
+            let originalValue = e.target.value;
+
+            // 1. Punkte in Kommas umwandeln
+            let normalizedValue = originalValue.replace(/\./g, ',');
+
+            // 2. Nur Ziffern und Kommas zulassen
+            let cleanValue = normalizedValue.replace(/[^0-9,]/g, '');
+
+            // 3. Nur maximal ein Komma erlauben
+            const parts = cleanValue.split(',');
+            if (parts.length > 2) {
+                cleanValue = parts[0] + ',' + parts.slice(1).join('');
+            }
+
+            e.target.value = cleanValue;
+
+            // 4. Cursor-Position anpassen
+            if (originalValue !== cleanValue) { 
+                cursorPosition = cursorPosition + (cleanValue.length - originalValue.length); 
+            }
+            try {
+                e.target.setSelectionRange(cursorPosition, cursorPosition);
+            } catch (err) {
+                // Ignorieren
+            }
+
+            calculate();
+        }
+
+        // Entfernt Tausenderpunkte beim Anklicken für flüssiges Bearbeiten
+        function handleFocus(e) {
+            const rawValue = e.target.value.replace(/\./g, '');
+            if (rawValue) {
+                e.target.value = rawValue;
+            }
+        }
+
+        // Formatiert das Eingabefeld nach der Eingabe (bei blur)
+        function formatNumericInput(event, decimals) {
+            const input = event.target;
+            const value = parseGermanFloat(input.value);
+            if (!isNaN(value)) {
+                const hasComma = input.value.includes(',');
+                const currentDecimals = hasComma ? Math.min(input.value.split(',')[1].length, decimals) : 0;
+                const formattedValue = formatToGermanString(value, currentDecimals);
+                if (input.value && input.value !== formattedValue) {
+                    input.value = formattedValue;
+                    calculate();
+                }
+            }
+        }
 
         function switchTab(tab) {
             activeTab = tab;
@@ -224,21 +291,20 @@
             else if (tab === 'diameter') { tabDiameter.classList.add('active'); panelDiameter.classList.remove('hidden'); }
             else { tabCrossSection.classList.add('active'); panelCrossSection.classList.remove('hidden'); }
             
-            // Sofort neu berechnen, damit das Ergebnis zum aktiven Tab passt
             calculate();
         }
 
         function calculate() {
             errorMessageDiv.classList.add('hidden');
-            const voltage = parseFloat(allInputs.voltage.value);
-            const length = parseFloat(allInputs.length.value);
+            const voltage = parseGermanFloat(allInputs.voltage.value);
+            const length = parseGermanFloat(allInputs.length.value);
             const material = materialSelect.value;
             const installation = installationSelect.value;
 
             if (isNaN(voltage) || voltage <= 0 || isNaN(length) || length <= 0) return;
 
             if (activeTab === 'current') {
-                const current = parseFloat(allInputs.current.value);
+                const current = parseGermanFloat(allInputs.current.value);
                 if (isNaN(current) || current <= 0) {
                     resultsContainer.classList.add('hidden');
                     return;
@@ -249,9 +315,16 @@
                 const vDropCs = (2 * length * current) / (CONDUCTIVITY[material] * (voltage * VOLTAGE_DROP_LIMIT));
                 let finalCs = standardCrossSections.find(cs => cs >= thermalCs && cs >= vDropCs);
                 if (!finalCs) return;
-                displayResults({ crossSection: finalCs, diameter: 2 * Math.sqrt(finalCs / Math.PI), voltagedrop: { v: (2 * length * current) / (CONDUCTIVITY[material] * finalCs), percent: (((2 * length * current) / (CONDUCTIVITY[material] * finalCs)) / voltage) * 100 } });
+                displayResults({ 
+                    crossSection: finalCs, 
+                    diameter: 2 * Math.sqrt(finalCs / Math.PI), 
+                    voltagedrop: { 
+                        v: (2 * length * current) / (CONDUCTIVITY[material] * finalCs), 
+                        percent: (((2 * length * current) / (CONDUCTIVITY[material] * finalCs)) / voltage) * 100 
+                    } 
+                });
             } else {
-                let cs = activeTab === 'diameter' ? Math.PI * Math.pow(parseFloat(allInputs.diameter.value) / 2, 2) : parseFloat(allInputs.crossSection.value);
+                let cs = activeTab === 'diameter' ? Math.PI * Math.pow(parseGermanFloat(allInputs.diameter.value) / 2, 2) : parseGermanFloat(allInputs.crossSection.value);
                 if (isNaN(cs) || cs <= 0) {
                     resultsContainer.classList.add('hidden');
                     return;
@@ -262,7 +335,10 @@
                     res.standardCrossSection = std;
                     const maxI = Math.min(currentCapacity[material][installation][standardCrossSections.indexOf(std)], (std * CONDUCTIVITY[material] * (voltage * VOLTAGE_DROP_LIMIT)) / (2 * length));
                     res.maxCurrent = maxI;
-                    res.voltagedrop = { v: (2 * length * maxI) / (CONDUCTIVITY[material] * std), percent: (((2 * length * maxI) / (CONDUCTIVITY[material] * std)) / voltage) * 100 };
+                    res.voltagedrop = { 
+                        v: (2 * length * maxI) / (CONDUCTIVITY[material] * std), 
+                        percent: (((2 * length * maxI) / (CONDUCTIVITY[material] * std)) / voltage) * 100 
+                    };
                 }
                 displayResults(res);
             }
@@ -290,10 +366,20 @@
             }
         }
 
+        // --- Event Listener registrieren ---
         tabCurrent.addEventListener('click', () => switchTab('current'));
         tabDiameter.addEventListener('click', () => switchTab('diameter'));
         tabCrossSection.addEventListener('click', () => switchTab('crossSection'));
-        document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', calculate));
+
+        Object.values(allInputs).forEach(input => {
+            input.addEventListener('input', handleInput);
+            input.addEventListener('focus', handleFocus);
+            input.addEventListener('blur', (e) => formatNumericInput(e, 2));
+        });
+
+        materialSelect.addEventListener('change', calculate);
+        installationSelect.addEventListener('change', calculate);
+
         switchTab('current');
     </script>
 </body>
