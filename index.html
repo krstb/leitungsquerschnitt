@@ -59,7 +59,7 @@
     <div class="w-full max-w-lg mx-auto bg-white rounded-2xl shadow-lg p-3 md:p-4">
         <div class="text-center mb-4">
             <h1 class="text-xl md:text-2xl font-bold text-gray-800">Leitungsquerschnitt</h1>
-            <p class="text-gray-500 text-sm mt-1">Inkl. Spannungsabfall-Berechnung</p>
+            <p class="text-gray-500 text-sm mt-1">Inkl. Berechnung des Spannungsabfalls</p>
         </div>
 
         <div class="mb-2 border-b border-gray-200">
@@ -95,7 +95,28 @@
             <div id="panel-cross-section" class="hidden">
                 <div class="flex items-center justify-between gap-2 mb-2">
                     <label for="cross-section" class="text-sm font-medium text-gray-700">Querschnitt (in mm²)</label>
-                    <input type="text" id="cross-section" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="z.B. 1,5" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
+                    <input type="text" id="cross-section" list="cross-section-options" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="z.B. 1,5" class="p-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition w-[150px]">
+                    <datalist id="cross-section-options">
+                        <option value="0,013">0,013 mm² - Mikroelektronik</option>
+                        <option value="0,03">0,03 mm² - Mikroelektronik / Sensorik</option>
+                        <option value="0,05">0,05 mm² - Mikroelektronik / Sensorik</option>
+                        <option value="0,08">0,08 mm² - Sensorik / AWG</option>
+                        <option value="0,14">0,14 mm² - Elektronik / Steuerleitungen</option>
+                        <option value="0,25">0,25 mm² - Elektronik / Steuerleitungen</option>
+                        <option value="0,34">0,34 mm² - Steuerleitungen (M8/M12)</option>
+                        <option value="0,5">0,5 mm² - Steuerleitungen / Signalkabel</option>
+                        <option value="0,75">0,75 mm² - Flexible Anschlussleitungen</option>
+                        <option value="1,0">1,0 mm² - Geräteanschlussleitungen</option>
+                        <option value="1,5">1,5 mm² - Lichtstromkreise / VDE</option>
+                        <option value="2,5">2,5 mm² - Steckdosenstromkreise</option>
+                        <option value="4">4,0 mm² - Herde / Durchlauferhitzer</option>
+                        <option value="6">6,0 mm² - Unterverteiler / Wallboxen</option>
+                        <option value="10">10,0 mm² - Hauptzuleitungen</option>
+                        <option value="16">16,0 mm² - Hausanschlussleitungen</option>
+                        <option value="25">25,0 mm² - Industrielle Zuleitungen</option>
+                        <option value="35">35,0 mm² - Industrielle Zuleitungen</option>
+                        <option value="50">50,0 mm² - Trafostationen</option>
+                    </datalist>
                 </div>
             </div>
 
@@ -157,17 +178,17 @@
     </div>
 
     <script>
-        const standardCrossSections = [0.14, 0.25, 0.34, 0.5, 0.75, 1.0, 1.5, 2.5, 4, 6, 10, 16, 25, 35, 50];
+        const standardCrossSections = [0.013, 0.03, 0.05, 0.08, 0.14, 0.25, 0.34, 0.5, 0.75, 1.0, 1.5, 2.5, 4, 6, 10, 16, 25, 35, 50];
         const currentCapacity = {
             copper: {
-                air:    [3, 5, 7, 9, 12, 15, 19.5, 26, 34, 44, 61, 82, 108, 135, 168],
-                wall:   [2.5, 4, 6, 8, 10, 10, 15.5, 21, 28, 36, 50, 68, 89, 111, 138],
-                ground: [5, 7, 9, 12, 15, 18, 24, 32, 42, 53, 73, 98, 125, 155, 180]
+                air:    [0.5, 1.0, 1.5, 2.0, 3, 5, 7, 9, 12, 15, 19.5, 26, 34, 44, 61, 82, 108, 135, 168],
+                wall:   [0.4, 0.8, 1.2, 1.6, 2.5, 4, 6, 8, 10, 10, 15.5, 21, 28, 36, 50, 68, 89, 111, 138],
+                ground: [0.8, 1.5, 2.0, 3.0, 5, 7, 9, 12, 15, 18, 24, 32, 42, 53, 73, 98, 125, 155, 180]
             },
             aluminum: {
-                air:    [2.3, 3.9, 5.5, 7, 9.4, 11.7, 15.2, 20.3, 26.5, 34.3, 47.6, 64, 84.2, 105, 131],
-                wall:   [1.9, 3.1, 4.7, 6.2, 7.8, 10.1, 12.9, 16.4, 21.8, 28.1, 39, 53, 69.4, 86.6, 108],
-                ground: [3.9, 5.5, 7, 9.4, 11.7, 14, 18.7, 25, 32.8, 41.3, 57, 76.4, 97.5, 121, 140]
+                air:    [0.4, 0.8, 1.2, 1.6, 2.3, 3.9, 5.5, 7, 9.4, 11.7, 15.2, 20.3, 26.5, 34.3, 47.6, 64, 84.2, 105, 131],
+                wall:   [0.3, 0.6, 0.9, 1.3, 1.9, 3.1, 4.7, 6.2, 7.8, 10.1, 12.9, 16.4, 21.8, 28.1, 39, 53, 69.4, 86.6, 108],
+                ground: [0.6, 1.1, 1.6, 2.5, 3.9, 5.5, 7, 9.4, 11.7, 14, 18.7, 25, 32.8, 41.3, 57, 76.4, 97.5, 121, 140]
             }
         };
         const CONDUCTIVITY = { copper: 56, aluminum: 36 };
@@ -347,9 +368,9 @@
         function displayResults(results) {
             resultsContainer.classList.remove('hidden');
             Object.values(resultContainers).forEach(c => c.classList.add('hidden'));
-            if (results.crossSection) resultSpans.crossSection.textContent = `${results.crossSection.toLocaleString('de-DE', {maximumFractionDigits:2})} mm²`;
-            if (results.standardCrossSection) resultSpans.standardCrossSection.textContent = `${results.standardCrossSection.toLocaleString('de-DE')} mm²`;
-            if (results.diameter) resultSpans.diameter.textContent = `${results.diameter.toLocaleString('de-DE', {maximumFractionDigits:2})} mm`;
+            if (results.crossSection) resultSpans.crossSection.textContent = `${results.crossSection.toLocaleString('de-DE', {maximumFractionDigits:3})} mm²`;
+            if (results.standardCrossSection) resultSpans.standardCrossSection.textContent = `${results.standardCrossSection.toLocaleString('de-DE', {maximumFractionDigits:3})} mm²`;
+            if (results.diameter) resultSpans.diameter.textContent = `${results.diameter.toLocaleString('de-DE', {maximumFractionDigits:3})} mm`;
             if (results.maxCurrent) resultSpans.current.textContent = `${results.maxCurrent.toLocaleString('de-DE', {maximumFractionDigits:2})} A`;
             if (results.voltagedrop) resultSpans.voltagedrop.textContent = `${results.voltagedrop.v.toLocaleString('de-DE', {maximumFractionDigits:2})} V (${results.voltagedrop.percent.toLocaleString('de-DE', {maximumFractionDigits:2})} %)`;
             
@@ -371,10 +392,11 @@
         tabDiameter.addEventListener('click', () => switchTab('diameter'));
         tabCrossSection.addEventListener('click', () => switchTab('crossSection'));
 
-        Object.values(allInputs).forEach(input => {
+        ['current', 'diameter', 'crossSection', 'voltage', 'length'].forEach(id => {
+            const input = allInputs[id];
             input.addEventListener('input', handleInput);
             input.addEventListener('focus', handleFocus);
-            input.addEventListener('blur', (e) => formatNumericInput(e, 2));
+            input.addEventListener('blur', (e) => formatNumericInput(e, 3));
         });
 
         materialSelect.addEventListener('change', calculate);
